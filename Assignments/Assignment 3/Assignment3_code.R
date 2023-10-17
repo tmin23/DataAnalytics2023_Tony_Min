@@ -126,7 +126,8 @@ hist29 <- ggplot(data=nyt29, aes(x=Impressions)) +
 impres <- ggarrange(hist7, hist13, hist14,
                          hist15, hist17, hist23, hist29)
 annotate_figure(impres, top = text_grob("Impressions Histograms",
-                                             color = "blue", face = "bold", size = 10))
+                                             color = "green", face = "bold", size = 10))
+
 # Empirical Cumulative Distribution Function for Age
 ecdf7 <- ggplot(data=nyt7[nyt7$Age > 0,], aes(x=Age)) + 
   stat_ecdf(geom = "point") + ggtitle("Dataset 7")
@@ -135,13 +136,13 @@ ecdf13 <- ggplot(data=nyt13[nyt13$Age > 0,], aes(x=Age)) +
 ecdf14 <- ggplot(data=nyt14[nyt14$Age > 0,], aes(x=Age)) + 
   stat_ecdf(geom = "point") + ggtitle("Dataset 14")
 ecdf15 <- ggplot(data=nyt15[nyt15$Age > 0,], aes(x=Age)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 15")
 ecdf17 <- ggplot(data=nyt17[nyt17$Age > 0,], aes(x=Age)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 17")
 ecdf23 <- ggplot(data=nyt23[nyt23$Age > 0,], aes(x=Age)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 23")
 ecdf29 <- ggplot(data=nyt29[nyt29$Age > 0,], aes(x=Age)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 29")
 
 Age_ecdf <- ggarrange(ecdf7, ecdf13, ecdf14,
                       ecdf15, ecdf17, ecdf23, ecdf29)
@@ -155,13 +156,13 @@ ecdf13 <- ggplot(data=nyt13, aes(x=Impressions)) +
 ecdf14 <- ggplot(data=nyt14, aes(x=Impressions)) + 
   stat_ecdf(geom = "point") + ggtitle("Dataset 14")
 ecdf15 <- ggplot(data=nyt15, aes(x=Impressions)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 15")
 ecdf17 <- ggplot(data=nyt17, aes(x=Impressions)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 17")
 ecdf23 <- ggplot(data=nyt23, aes(x=Impressions)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 23")
 ecdf29 <- ggplot(data=nyt29, aes(x=Impressions)) + 
-  stat_ecdf(geom = "point") + ggtitle("Dataset 13")
+  stat_ecdf(geom = "point") + ggtitle("Dataset 29")
 
 impres_ecdf <- ggarrange(ecdf7, ecdf13, ecdf14,
                       ecdf15, ecdf17, ecdf23, ecdf29)
@@ -179,7 +180,7 @@ qq29 <- ggplot(data=nyt29[nyt29$Age > 0,], aes(sample=Age)) + stat_qq() + ggtitl
 
 age_qq <- ggarrange(qq7, qq13, qq14, qq15, qq17, qq23, qq29)
 annotate_figure(age_qq, top = text_grob("Age QQ-Plots",
-                                             color = "blue", face = "bold", size = 10))
+                                             color = "purple", face = "bold", size = 10))
 
 # QQ Plot for Impressions
 qq7 <- ggplot(data=nyt7, aes(sample=Impressions)) + stat_qq() + ggtitle("Dataset 7")
@@ -192,5 +193,11 @@ qq29 <- ggplot(data=nyt29, aes(sample=Impressions)) + stat_qq() + ggtitle("Datas
 
 impres_qq <- ggarrange(qq7, qq13, qq14, qq15, qq17, qq23, qq29)
 annotate_figure(impres_qq, top = text_grob("Impressions QQ-Plots",
-                                             color = "blue", face = "bold", size = 10))
+                                             color = "red", face = "bold", size = 10))
 
+# Significance test
+
+lin_model <- lm(nyt7$Age[nyt7$Age > 0] ~ nyt7$Impressions[nyt7$Age > 0])
+lin_model
+plot(nyt7$Age[nyt7$Age > 0]~nyt7$Impressions[nyt7$Age > 0], xlab="Impressions", ylab="Age", main="Age vs. Impressions")
+abline(lin_model, col="blue", lwd=2)
