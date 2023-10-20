@@ -22,7 +22,7 @@ plot(resid(m1))
 # Model 2
 
 m2<-lm(log(bronx1$SALE.PRICE)~log(bronx1$GROSS.SQUARE.FEET)+log(bronx1$LAND.SQUARE.FEET)+factor(bronx1$NEIGHBORHOOD))
-summary(m2)
+summary(m2)s
 plot(resid(m2))
 # Suppress intercept - using "0+ ..."
 m2a<-lm(log(bronx1$SALE.PRICE)~0+log(bronx1$GROSS.SQUARE.FEET)+log(bronx1$LAND.SQUARE.FEET)+factor(bronx1$NEIGHBORHOOD))
