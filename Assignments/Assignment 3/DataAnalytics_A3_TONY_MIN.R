@@ -215,3 +215,113 @@ lin_model <- lm(nyt7$Age[nyt7$Age > 0] ~ nyt7$Impressions[nyt7$Age > 0])
 lin_model
 plot(nyt7$Age[nyt7$Age > 0]~nyt7$Impressions[nyt7$Age > 0], xlab="Impressions", ylab="Age", main="Age vs. Impressions")
 abline(lin_model, col="blue", lwd=2)
+
+
+
+
+
+
+
+# 6000 Level Question Code
+# Choosing 4 and reloading data
+nyt7 = read.csv("Data/nyt7.csv")
+nyt13 = read.csv("Data/nyt13.csv")
+nyt14 = read.csv("Data/nyt14.csv")
+nyt15 = read.csv("Data/nyt15.csv")
+
+# Filter data sets
+nyt7 <- nyt7[nyt7$Age > 0 & nyt7$Impressions > 0, ]
+nyt13 <- nyt13[nyt13$Age > 0 & nyt13$Impressions > 0, ]
+nyt14 <- nyt14[nyt14$Age > 0 & nyt14$Impressions > 0, ]
+nyt15 <- nyt15[nyt15$Age > 0 & nyt15$Impressions > 0, ]
+
+# Normality Test 
+ad.test(nyt7$Age)$p.value 
+ad.test(nyt7$Impressions)$p.value
+ad.test(nyt13$Age)$p.value
+ad.test(nyt13$Impressions)$p.value
+ad.test(nyt14$Age)$p.value
+ad.test(nyt14$Impressions)$p.value
+ad.test(nyt15$Age)$p.value
+ad.test(nyt15$Impressions)$p.value
+
+# Creating Histograms for Age
+par(mfrow = c(2, 2))
+hist(nyt7$Age, main = "Dataset 7", xlab = "Age", col = 'blue')
+hist(nyt13$Age, main = "Dataset 13", xlab = "Age", col = 'red')
+hist(nyt14$Age, main = "Dataset 14", xlab = "Age", col = 'green')
+hist(nyt15$Age, main = 'Dataset 15', xlab = "Age", col = 'yellow')
+
+# Creating Histograms for Impressions
+hist(nyt7$Impressions, main = "Dataset 7", xlab = "Impressions", col = 'blue')
+hist(nyt13$Impressions, main = "Dataset 13", xlab = "Impressions", col = 'red')
+hist(nyt14$Impressions, main = "Dataset 14", xlab = "Impressions", col = 'green')
+hist(nyt15$Impressions, main = 'Dataset 15', xlab = "Impressions", col = 'yellow')
+
+# Plot ECDFs for Age
+nyt7_ecdf <- ecdf(nyt7$Age)
+plot(nyt7_ecdf, main = "ECDF for Age (Dataset 7)", xlab = "Age", ylab = "ECDF")
+abline(h = 0.5, col = "red", lty = 2)
+nyt13_ecdf <- ecdf(nyt13$Age)
+plot(nyt13_ecdf, main = "ECDF for Age (Dataset 13)", xlab = "Age", ylab = "ECDF")
+abline(h = 0.5, col = "red", lty = 2)
+nyt14_ecdf <- ecdf(nyt14$Age)
+plot(nyt14_ecdf, main = "ECDF for Age (Dataset 14)", xlab = "Age", ylab = "ECDF")
+abline(h = 0.5, col = "red", lty = 2)
+nyt15_ecdf <- ecdf(nyt15$Age)
+plot(nyt15_ecdf, main = "ECDF for Age (Dataset 15)", xlab = "Age", ylab = "ECDF")
+abline(h = 0.5, col = "red", lty = 2)
+
+# Plot ECDFs for Impressions
+nyt7_ecdf <- ecdf(nyt7$Impressions)
+plot(nyt7_ecdf, main = "ECDF for Impressions (Dataset 7)", xlab = "Impressions", ylab = "ECDF")
+abline(h = 0.5, col = "purple", lty = 2)
+nyt13_ecdf <- ecdf(nyt13$Impressions)
+plot(nyt13_ecdf, main = "ECDF for Impressions (Dataset 13)", xlab = "Impressions", ylab = "ECDF")
+abline(h = 0.5, col = "purple", lty = 2)
+nyt14_ecdf <- ecdf(nyt14$Impressions)
+plot(nyt14_ecdf, main = "ECDF for Impressions (Dataset 14)", xlab = "Impressions", ylab = "ECDF")
+abline(h = 0.5, col = "purple", lty = 2)
+nyt15_ecdf <- ecdf(nyt15$Impressions)
+plot(nyt15_ecdf, main = "ECDF for Impressions (Dataset 15)", xlab = "Impressions", ylab = "ECDF")
+abline(h = 0.5, col = "purple", lty = 2)
+
+# Plot QQ distribution for Age * Normal Distribution
+nyt7_qq <- qnorm(ppoints(nyt7$Age))
+qqplot(nyt7_qq, nyt7$Age, main = "QQ for Age (Dataset 7)", xlab = "Theoretical Quantiles", ylab = "QQ")
+nyt13_qq <- qnorm(ppoints(nyt13$Age))
+qqplot(nyt13_qq, nyt13$Age, main = "QQ for Age (Dataset 13)", xlab = "Theoretical Quantiles", ylab = "QQ")
+nyt14_qq <- qnorm(ppoints(nyt14$Age))
+qqplot(nyt14_qq, nyt14$Age, main = "QQ for Age (Dataset 14)", xlab = "Theoretical Quantiles", ylab = "QQ")
+nyt15_qq <- qnorm(ppoints(nyt15$Age))
+qqplot(nyt15_qq, nyt15$Age, main = "QQ for Age (Dataset 15)", xlab = "Theoretical Quantiles", ylab = "QQ")
+
+# Plot QQ Distribution for Impressions * Normal Distribution
+nyt7_qq <- qnorm(ppoints(nyt7$Impressions))
+qqplot(nyt7_qq, nyt7$Impressions, main = "QQ for Impressions (Dataset 7)", xlab = "Theoretical Quantiles", ylab = "QQ")
+nyt13_qq <- qnorm(ppoints(nyt13$Impressions))
+qqplot(nyt13_qq, nyt13$Impressions, main = "QQ for Impressions (Dataset 13)", xlab = "Theoretical Quantiles", ylab = "QQ")
+nyt14_qq <- qnorm(ppoints(nyt14$Impressions))
+qqplot(nyt14_qq, nyt14$Impressions, main = "QQ for Impressions (Dataset 14)", xlab = "Theoretical Quantiles", ylab = "QQ")
+nyt15_qq <- qnorm(ppoints(nyt15$Impressions))
+qqplot(nyt15_qq, nyt15$Impressions, main = "QQ for Impressions (Dataset 15)", xlab = "Theoretical Quantiles", ylab = "QQ")
+
+# Linear Regression
+linear_model1 <- lm(nyt7$Age ~ nyt7$Impressions)
+linear_model1 
+linear_model2 <- lm(nyt13$Age ~ nyt13$Impressions)
+linear_model2 
+linear_model3 <- lm(nyt14$Age ~ nyt14$Impressions)
+linear_model3 
+linear_model4 <- lm(nyt15$Age ~ nyt15$Impressions)
+linear_model4
+
+plot(nyt7$Age ~ nyt7$Impressions, xlab="Impressions", ylab="Age", main="Age vs. Impressions (Dataset 7)")
+abline(linear_model1, col="blue", lwd=2)
+plot(nyt13$Age ~ nyt13$Impressions, xlab="Impressions", ylab="Age", main="Age vs. Impressions (Dataset 13)")
+abline(linear_model2, col = 'red', lwd = 2)
+plot(nyt14$Age ~ nyt14$Impressions, xlab="Impressions", ylab="Age", main="Age vs. Impressions (Dataset 14)")
+abline(linear_model3, col = 'green', lwd = 2)
+plot(nyt15$Age ~ nyt15$Impressions, xlab="Impressions", ylab="Age", main="Age vs. Impressions (Dataset 15)")
+abline(linear_model4, col = 'purple', lwd = 2)
+
