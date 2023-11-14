@@ -1,7 +1,10 @@
 library(e1071)
 library(rpart)
+
+install.packages("mlbench")
+library(mlbench)
 data(Glass, package="mlbench")
-index <- 1:nrow(Glass)
+index <-1:nrow(Glass)
 testindex <- sample(index, trunc(length(index)/3))
 testset <- Glass[testindex,]
 trainset <- Glass[-testindex,]
