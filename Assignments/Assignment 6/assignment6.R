@@ -31,8 +31,8 @@ unique(attendance$DistrictName)
 unique(attendance$Category)
 unique(attendance$StudentGroup)
 
-# Linear Regerssion
-# logistic Regresion
+# Linear Regression
+# logistic Regression
 # Decision Tree
 # Decision tree classifier
 # SVM classier
