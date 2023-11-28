@@ -32,14 +32,14 @@ abline(dist, col="red")
 
 # Decision Tree
 dim(abs)
-samp_abs <- sample(1:nrow(abs), 50)
-train_abs <- abs[samp_abs, ]
-test_abs <- abs[-samp_abs, ]
+sample_abs <- sample(1:nrow(abs), 500)
+train_abs <- abs[sample_abs, ]
+test_abs <- abs[-sample_abs, ]
 dt <- rpart(Absenteeism.time.in.hours ~ ., data = train_abs)
 dt
 rpart.plot(dt)
 
-# Random Forest 
+# Random Forest
 set.seed(100)
 train <- sample(nrow(abs), 0.7 * nrow(abs), replace = FALSE)
 TrainSet <- abs[train,]
