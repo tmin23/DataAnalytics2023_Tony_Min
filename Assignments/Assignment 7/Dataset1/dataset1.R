@@ -8,29 +8,36 @@ View(abs)
 # EDA
 summary(abs)
 summary(abs$Absenteeism.time.in.hours)
-
-boxplot(abs$Absenteeism.time.in.hours)
+par(mfrow = c(1, 2))
+boxplot(abs$Absenteeism.time.in.hours, )
 hist(abs$Absenteeism.time.in.hours)
-hist(abs$Absenteeism.time.in.hours, xlim = c(0, 50), breaks = 100)
+hist(abs$Absenteeism.time.in.hours, xlim = c(0, 50), breaks = 100, main = 'Absenteeism Time in Hours ')
 
+boxplot(abs$Reason.for.absence, main = "Reason for Absence Boxplot")
+hist(abs$Reason.for.absence, main = "Reason for Absence Histgram")
+par(mfrow = c(1, 1))
 # Linear Regression 
 age <- lm(abs$Absenteeism.time.in.hours ~ abs$Age)
 age
 summary(age)
-plot(abs$Absenteeism.time.in.hours ~ abs$Age)
+plot(abs$Absenteeism.time.in.hours ~ abs$Age, main = "Age Vs. Absence Time")
 abline(age, col = 'blue')
 
 dist <- lm(abs$Absenteeism.time.in.hours ~ abs$Distance.from.Residence.to.Work)
 dist
 summary(dist)
-plot(abs$Absenteeism.time.in.hours ~ abs$Distance.from.Residence.to.Work)
+plot(abs$Absenteeism.time.in.hours ~ abs$Distance.from.Residence.to.Work, main = "Distance Vs. Absence Time")
 abline(dist, col="red")
 
 
 # Decision Tree
-tree_abs <- rpart(Absenteeism.time.in.hours ~ ., data = abs)
-tree_abs
-rpart.plot(tree_abs)
+dim(abs)
+samp_abs <- sample(1:nrow(abs), 50)
+train_abs <- abs[samp_abs, ]
+test_abs <- abs[-samp_abs, ]
+dt <- rpart(Absenteeism.time.in.hours ~ ., data = train_abs)
+dt
+rpart.plot(dt)
 
 # Random Forest 
 set.seed(100)
