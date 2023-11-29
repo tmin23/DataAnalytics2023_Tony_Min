@@ -8,7 +8,7 @@ View(cancer)
 
 # EDA
 summary(cancer)
-
+par(mfrow = c(1, 2))
 summary(cancer$behavior_eating)
 boxplot(cancer$behavior_eating, main = "Behavior Eating Boxplot")
 hist(cancer$behavior_eating, main = "Behavior Eating Boxplot")
@@ -32,6 +32,7 @@ hist(cancer$socialSupport_appreciation, main = 'Social Support Appreciation Hist
 summary(cancer$empowerment_desires)
 boxplot(cancer$empowerment_desires, main = "Empowerment Desires Boxplot")
 hist(cancer$empowerment_abilities, main = "Empowerment Desires Histogram")
+par(mfrow = c(1, 1))
 
 # Decision Tree
 dim(cancer)
@@ -42,11 +43,15 @@ dt <- rpart(ca_cervix ~ ., data = train_cancer)
 dt
 rpart.plot(dt)
 
-
 # Random Forest
-rf <- randomForest(ca_cervix ~ ., data = cancer_train, importance = TRUE)
+set.seed(100)
+train <- sample(nrow(cancer), 0.7 * nrow(cancer), replace = FALSE)
+TrainSet <- cancer[train,]
+ValidSet <- cancer[-train,]
+rf <- randomForest(ca_cervix ~ ., data = TrainSet, importance = TRUE)
 rf
 importance(rf)
+
 
 # KNN
 cancer$ca_cervix[cancer$ca_cervix == 0] <- 'No'
@@ -63,3 +68,11 @@ k <- 9
 KNNpred <- knn(train = KNNtrain[1:19], test = KNNtest[1:19], cl = KNNtrain$ca_cervix, k = 9)
 KNNpred
 table(KNNpred)
+
+conf_matrix <- table(KNNpred, KNNtest$ca_cervix)
+
+# Calculate accuracy
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+
+# Display the accuracy
+print(accuracy)

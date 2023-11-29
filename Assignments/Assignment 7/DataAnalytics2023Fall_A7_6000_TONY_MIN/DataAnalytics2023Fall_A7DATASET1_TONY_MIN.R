@@ -16,6 +16,7 @@ hist(abs$Absenteeism.time.in.hours, xlim = c(0, 50), breaks = 100, main = 'Absen
 boxplot(abs$Reason.for.absence, main = "Reason for Absence Boxplot")
 hist(abs$Reason.for.absence, main = "Reason for Absence Histgram")
 par(mfrow = c(1, 1))
+
 # Linear Regression 
 age <- lm(abs$Absenteeism.time.in.hours ~ abs$Age)
 age
