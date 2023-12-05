@@ -74,3 +74,4 @@ summary(i2$Species)
 wts <- 100 / table(i2$Species)
 wts
 m <- svm(Species ~ ., data = i2, class.weights = wts)
+
