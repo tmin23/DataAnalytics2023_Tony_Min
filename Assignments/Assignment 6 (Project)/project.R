@@ -1,6 +1,9 @@
 library(dplyr)
 library(rpart)
 library(rpart.plot)
+library(ggplot2)
+library(e1071)
+library(randomForest)
 # Cleaning the Vaccine 
 vaccine.df <- read.csv("COVID-19_Vaccination_by_Town_and_Race_Ethnicity_-_ARCHIVED.csv")
 colnames(vaccine.df) <- c("TownName", "VaccinationStatus", "Race", "Type", "Value", "Date")
@@ -99,7 +102,7 @@ x_vals <- seq(min(all_df$Value), max(all_df$Value), length.out = 100)
 y_probs <- predict(log_reg, newdata = data.frame(Value = x_vals), type = 'response')
 lines(x_vals, y_probs, col = 'purple', lwd = 2)
 
-# Decision Tree
+# Decision Tree Classifier
 tree_model <- rpart(HighAttendance ~ Value, data = all_df, method = 'class')
 
 rpart.plot(tree_model)
@@ -107,6 +110,12 @@ rpart.plot(tree_model)
 predictions <- predict(tree_model, all_df, type = 'class')
 
 table(predictions, all_df$HighAttendance)
-# Decision tree classifier
-# SVM classier
+
 # Random forest regression 
+rf_model <- randomForest(`19-20rate` ~ Value, data = all_df, ntree = 100)
+rf_model
+# SVM classier
+set.seed(123)
+svmModel <- svm(HighAttendance ~ Value, data = all_df, kernel = 'linear')
+
+
