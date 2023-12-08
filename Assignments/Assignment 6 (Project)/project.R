@@ -1,4 +1,9 @@
 library(dplyr)
+library(rpart)
+library(rpart.plot)
+library(ggplot2)
+library(e1071)
+library(randomForest)
 # Cleaning the Vaccine 
 vaccine.df <- read.csv("COVID-19_Vaccination_by_Town_and_Race_Ethnicity_-_ARCHIVED.csv")
 colnames(vaccine.df) <- c("TownName", "VaccinationStatus", "Race", "Type", "Value", "Date")
@@ -50,7 +55,7 @@ df <- subset(df, select = -c(Date.x, Code, ReportPeriod, Date.y))
 
 white_df <- subset(df, Race == "NH White" & StudentGroup == "White")
 black_df <- subset(df, Race == "NH Black" & StudentGroup == 'Black or African American')
-hispanic_df <- subset(df, Race = "Hispanic" & StudentGroup == 'Hispanic/Latino of any race')
+hispanic_df <- subset(df, Race == "Hispanic" & StudentGroup == 'Hispanic/Latino of any race')
 all_df <- subset(df, Race == "Total" & StudentGroup == 'All other races')
 
 # Double check for null values 
@@ -69,15 +74,48 @@ hispanic_df <- subset(hispanic_df, select = -c(VaccinationStatus, Race, Type, Ca
 all_df <- subset(all_df, select = -c(VaccinationStatus, Race, Type, Category, StudentGroup, 
                                      `21-22count`, `20-21count`, `19-20count`))
 # Now multiple rates to be out of 100 percent
-white_df$`21-22rate` <- round(white_df$`21-22rate` * 100, 1)
-white_df$''
-# Shapiro Wilk Test 
-
+white_df <- white_df %>%
+  mutate(across(c(`21-22rate`, `20-21rate`, `19-20rate`), ~ round(. * 100, 1)))
+black_df <- black_df %>%
+  mutate(across(c(`21-22rate`, `20-21rate`, `19-20rate`), ~ round(. * 100, 1)))
+hispanic_df <- hispanic_df %>%
+  mutate(across(c(`21-22rate`, `20-21rate`, `19-20rate`), ~ round(. * 100, 1)))
+all_df <- all_df %>% 
+  mutate(across(c(`21-22rate`, `20-21rate`, `19-20rate`), ~ round(. * 100, 1)))
 
 # Linear Regression Model
+lr <- lm(`19-20rate` ~ Value, data = all_df)
+summary(lr)
 
-# logistic Regression
-# Decision Tree
-# Decision tree classifier
-# SVM classier
+plot(all_df$Value, all_df$`19-20rate`,  main = "Scatter Plot with Linear Regression Line", 
+     xlab = "Vaccination Percent", ylab = "Attendance Rate")
+abline(lr, col = 'red')
+
+# logistic Regression Model
+all_df$HighAttendance <- ifelse(all_df$`19-20rate` > 95, 1, 0)
+log_reg <- glm(HighAttendance ~ Value, data = all_df, family = 'binomial')
+summary(log_reg)
+plot(all_df$Value, all_df$HighAttendance, col = 'blue', pch = 16, 
+     xlab = "Vaccination Percent", ylab = 'High Attendance (1) or Not (0)')
+
+x_vals <- seq(min(all_df$Value), max(all_df$Value), length.out = 100)
+y_probs <- predict(log_reg, newdata = data.frame(Value = x_vals), type = 'response')
+lines(x_vals, y_probs, col = 'purple', lwd = 2)
+
+# Decision Tree Classifier
+tree_model <- rpart(HighAttendance ~ Value, data = all_df, method = 'class')
+
+rpart.plot(tree_model)
+
+predictions <- predict(tree_model, all_df, type = 'class')
+
+table(predictions, all_df$HighAttendance)
+
 # Random forest regression 
+rf_model <- randomForest(`19-20rate` ~ Value, data = all_df, ntree = 100)
+rf_model
+# SVM classier
+set.seed(123)
+svmModel <- svm(HighAttendance ~ Value, data = all_df, kernel = 'linear')
+
+
